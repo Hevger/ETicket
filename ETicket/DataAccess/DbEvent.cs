@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,14 +13,16 @@ namespace DataAccess
         string connectionString = ConfigurationManager.ConnectionStrings["ETicketDb"].ConnectionString;
 
 
-        public void CreateEvent(Event event)
+        public void CreateEvent()
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                SqlCommand command = connection.CreateCommand();
-                command
+                using (SqlCommand command = connection.CreateCommand())
+                {
+                    command.CommandText = $"Insert into Event values ('DanceNotDance','Dance or dont', 'F0',  {DateTime.Now},  {DateTime.Now},  {DateTime.Now}, 30, 35.00)";
+                    command.ExecuteNonQuery();
+                }
             }
-
         }
         
 
