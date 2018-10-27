@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
-    public class Ticket
+    public class Seat
     {
-        public int TicketId { get; set; }
         public int SeatId { get; set; }
+        public int SeatNumber { get; set; }
         public int EventId { get; set; }
-        public int CustomerId { get; set; }
+        public int Available { get; set; }
     }
 }

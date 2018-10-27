@@ -17,8 +17,6 @@ namespace Domain
         public DateTime Date { get; set; }
         public int AvailableTickets { get; set; }
         public decimal TicketPrice { get; set; }
-
-
-
+        public List<Seat> ListOfSeats { get; set; }
     }
 }

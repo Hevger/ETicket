@@ -12,5 +12,6 @@ namespace Domain
         public decimal TotalPrice { get; set; }
         public DateTime Date { get; set; }
         public int Quantity { get; set; }
+        public int CustomerId { get; set; }
     }
 }
