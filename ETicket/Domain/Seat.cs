@@ -11,6 +11,6 @@ namespace Domain
         public int SeatId { get; set; }
         public int SeatNumber { get; set; }
         public int EventId { get; set; }
-        public int Available { get; set; }
+        public bool Available { get; set; }
     }
 }

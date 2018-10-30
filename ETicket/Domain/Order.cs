@@ -13,5 +13,6 @@ namespace Domain
         public DateTime Date { get; set; }
         public int Quantity { get; set; }
         public int CustomerId { get; set; }
+        public List<Ticket> Tickets { get; set; }
     }
 }
