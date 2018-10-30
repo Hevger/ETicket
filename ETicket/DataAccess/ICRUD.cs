@@ -10,5 +10,8 @@ namespace DataAccess
     {
         void Create(Object obj);
         Object Get(int id);
+        void Delete(int id);
+        void Update(int id, Object obj);
+
     }
 }

@@ -18,5 +18,10 @@ namespace Domain
         public int AvailableTickets { get; set; }
         public decimal TicketPrice { get; set; }
         public List<Seat> ListOfSeats { get; set; }
+
+        public override string ToString()
+        {
+            return Title;
+        }
     }
 }

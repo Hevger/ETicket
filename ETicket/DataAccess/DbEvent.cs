@@ -38,7 +38,6 @@ namespace DataAccess
         }
 
 
-
         // Get Event
         public object Get(int id = 0)
         {
@@ -49,8 +48,8 @@ namespace DataAccess
                 using (SqlCommand command = connection.CreateCommand())
                 {
                     command.CommandText = "Select * from Event where EventId = @id";
-                    command.Parameters.AddWithValue("EventId", id);
-
+                    SqlParameter EventId = command.Parameters.Add("@id", SqlDbType.Int);
+                    EventId.Value = id;
 
                     var reader = command.ExecuteReader();
                     while (reader.Read())
@@ -67,7 +66,7 @@ namespace DataAccess
                             AvailableTickets = reader.GetInt32(reader.GetOrdinal("AvailableTickets")),
                             TicketPrice = reader.GetDecimal(reader.GetOrdinal("TicketPrice"))
                         };
-                        }
+                    }
                     return newEvent;
                 }
             }
@@ -75,10 +74,38 @@ namespace DataAccess
 
 
         // Delete Event 
+        public void Delete(int id)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = connection.CreateCommand())
+                {
+                    command.CommandText = "Delete from Event where EventId = @id";
+                    SqlParameter EventId = command.Parameters.Add("@id", SqlDbType.Int);
+                    EventId.Value = id;
 
-
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
 
         // Update Event
+        public void Update(int id, Object obj)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = connection.CreateCommand())
+                {
+                    command.CommandText = "Update Event SET Title = '', Description = '', Gate = '', GateOpens = '', StartTime = '', Date = '', AvailableTickets = '', TicketPrice = '' where EventId = @id";
+                    SqlParameter EventId = command.Parameters.Add("@id", SqlDbType.Int);
+                    EventId.Value = id;
+              
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
 
 
     }

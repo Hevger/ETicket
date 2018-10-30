@@ -30,7 +30,11 @@ namespace TestClient
             Console.WriteLine("-----");
 
             Event newEvent = (Event) db.Get(7);
-            Console.WriteLine(newEvent);
+            Console.WriteLine(newEvent.ToString());
+
+            Console.WriteLine("-----");
+
+            db.Delete(10);
         }
     }
 }
