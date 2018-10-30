@@ -8,6 +8,11 @@ namespace Domain
 {
     public class Customer : Person
     {
-        
+
+        public override string ToString()
+        {
+            return Name;
+        }
+
     }
 }

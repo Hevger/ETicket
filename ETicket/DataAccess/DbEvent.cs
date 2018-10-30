@@ -110,7 +110,6 @@ namespace DataAccess
                     command.Parameters.AddWithValue("Date", myEvent.Date);
                     command.Parameters.AddWithValue("AvailableTickets", myEvent.AvailableTickets);
                     command.Parameters.AddWithValue("TicketPrice", myEvent.TicketPrice);
-                    //command.Parameters.AddWithValue("EventId", myEvent.EventId);
 
                     command.ExecuteNonQuery();
                 }

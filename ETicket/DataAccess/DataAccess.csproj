@@ -41,7 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DbAdmin.cs" />
     <Compile Include="DbEvent.cs" />
+    <Compile Include="DbCustomer.cs" />
     <Compile Include="ICRUD.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
