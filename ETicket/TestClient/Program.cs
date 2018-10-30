@@ -29,12 +29,27 @@ namespace TestClient
 
             Console.WriteLine("-----");
 
-            Event newEvent = (Event) db.Get(7);
+            Event newEvent = (Event) db.Get(1);
             Console.WriteLine(newEvent.ToString());
 
             Console.WriteLine("-----");
 
-            db.Delete(10);
+            myEvent = new Event()
+            {
+                Title = "Changed",
+                Description = "Changed Changed",
+                Gate = "8b8",
+                GateOpens = DateTime.Now,
+                StartTime = DateTime.Now,
+                Date = DateTime.Now,
+                AvailableTickets = 30,
+                TicketPrice = 35.50M
+            };
+
+            myEvent.EventId = 6;
+
+            db.Update(myEvent);
+            
         }
     }
 }

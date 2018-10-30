@@ -91,17 +91,27 @@ namespace DataAccess
         }
 
         // Update Event
-        public void Update(int id, Object obj)
+        public void Update(Object obj)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
                 using (SqlCommand command = connection.CreateCommand())
                 {
-                    command.CommandText = "Update Event SET Title = '', Description = '', Gate = '', GateOpens = '', StartTime = '', Date = '', AvailableTickets = '', TicketPrice = '' where EventId = @id";
+                    Event myEvent = (Event)obj;
+                    command.CommandText = "Update Event SET Title = @title, Description = @Description, Gate = @Gate, GateOpens = @GateOpens, StartTime = @StartTime, Date = @Date, AvailableTickets = @AvailableTickets, TicketPrice = @TicketPrice where EventId = @id";
                     SqlParameter EventId = command.Parameters.Add("@id", SqlDbType.Int);
-                    EventId.Value = id;
-              
+                    EventId.Value = myEvent.EventId;
+                    command.Parameters.AddWithValue("Title", myEvent.Title);
+                    command.Parameters.AddWithValue("Description", myEvent.Description);
+                    command.Parameters.AddWithValue("Gate", myEvent.Gate);
+                    command.Parameters.AddWithValue("GateOpens", myEvent.GateOpens);
+                    command.Parameters.AddWithValue("StartTime", myEvent.StartTime);
+                    command.Parameters.AddWithValue("Date", myEvent.Date);
+                    command.Parameters.AddWithValue("AvailableTickets", myEvent.AvailableTickets);
+                    command.Parameters.AddWithValue("TicketPrice", myEvent.TicketPrice);
+                    //command.Parameters.AddWithValue("EventId", myEvent.EventId);
+
                     command.ExecuteNonQuery();
                 }
             }
