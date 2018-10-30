@@ -17,7 +17,7 @@ namespace DataAccess
         // Create Customer
         public void Create(Object obj)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString)) 
             {
                 connection.Open();
                 using (SqlCommand command = connection.CreateCommand())
