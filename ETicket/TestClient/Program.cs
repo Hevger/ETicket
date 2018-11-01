@@ -94,8 +94,7 @@ namespace TestClient
                 TicketPrice = 35.50M
             };
 
-            myEvent.EventId = 1;
-            db.Update(myEvent);
+            db.Create(myEvent);
 
         }
     }

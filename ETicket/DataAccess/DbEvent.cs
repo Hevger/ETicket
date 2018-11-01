@@ -12,7 +12,7 @@ namespace DataAccess
 {
     public class DbEvent : ICRUD
     {
-        string connectionString = ConfigurationManager.ConnectionStrings["ETicketDb"].ConnectionString;
+        string connectionString = ConfigurationManager.ConnectionStrings["Kraka"].ConnectionString;
 
         // Create Event 
         public void Create(Object obj)
