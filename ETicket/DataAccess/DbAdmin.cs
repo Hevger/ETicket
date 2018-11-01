@@ -12,7 +12,7 @@ namespace DataAccess
 {
     public class DbAdmin : ICRUD
     {
-        string connectionString = ConfigurationManager.ConnectionStrings["ETicketDb"].ConnectionString;
+        string connectionString = ConfigurationManager.ConnectionStrings["Kraka"].ConnectionString;
 
         // Create Admin
         public void Create(Object obj)

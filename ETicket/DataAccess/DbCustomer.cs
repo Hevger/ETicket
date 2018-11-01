@@ -12,7 +12,7 @@ namespace DataAccess
 {
     public class DbCustomer : ICRUD
     {
-        string connectionString = ConfigurationManager.ConnectionStrings["ETicketDb"].ConnectionString;
+        string connectionString = ConfigurationManager.ConnectionStrings["Kraka"].ConnectionString;
 
         // Create Customer
         public void Create(Object obj)

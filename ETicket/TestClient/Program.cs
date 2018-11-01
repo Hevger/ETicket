@@ -13,6 +13,7 @@ namespace TestClient
         static void Main(string[] args)
         {
             DbEvent db = new DbEvent();
+            DbSeat dbs = new DbSeat();
             //DbCustomer dbc = new DbCustomer();
 
             //Event myEvent = new Event()
@@ -94,7 +95,21 @@ namespace TestClient
                 TicketPrice = 35.50M
             };
 
-            db.Create(myEvent);
+            //db.Create(myEvent);
+            myEvent.EventId = 1;
+
+            Seat newSeat = new Seat()
+            {
+                SeatNumber = 3,
+                EventId = myEvent.EventId,
+                Available = true
+            };
+
+            newSeat.SeatId = 4;
+            dbs.Update(newSeat);
+
+            //dbs.Create(newSeat);
+
 
         }
     }

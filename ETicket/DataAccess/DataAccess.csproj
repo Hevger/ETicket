@@ -44,6 +44,9 @@
     <Compile Include="DbAdmin.cs" />
     <Compile Include="DbEvent.cs" />
     <Compile Include="DbCustomer.cs" />
+    <Compile Include="DbOrder.cs" />
+    <Compile Include="DbSeat.cs" />
+    <Compile Include="DbTicket.cs" />
     <Compile Include="ICRUD.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
