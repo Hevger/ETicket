@@ -43,8 +43,9 @@ namespace DataAccess
                 using (SqlCommand command = connection.CreateCommand())
                 {
                     command.CommandText = "Delete from Customer where CustomerId = @id";
-                    SqlParameter CustomerId = command.Parameters.Add("@id", SqlDbType.Int);
-                    CustomerId.Value = id;
+                    //SqlParameter CustomerId = command.Parameters.Add("@id", SqlDbType.Int);
+                    //CustomerId.Value = id;
+                    command.Parameters.AddWithValue("id", id);
 
                     command.ExecuteNonQuery();
                 }
@@ -61,8 +62,9 @@ namespace DataAccess
                 using (SqlCommand command = connection.CreateCommand())
                 {
                     command.CommandText = "Select * from Customer where CustomerId = @id";
-                    SqlParameter CustomerId = command.Parameters.Add("@id", SqlDbType.Int);
-                    CustomerId.Value = id;
+                    //SqlParameter CustomerId = command.Parameters.Add("@id", SqlDbType.Int);
+                    //CustomerId.Value = id;
+                    command.Parameters.AddWithValue("id", id);
 
                     var reader = command.ExecuteReader();
                     while (reader.Read())
@@ -92,8 +94,10 @@ namespace DataAccess
                 {
                     Customer myCustomer = (Customer)obj;
                     command.CommandText = "Update Customer SET Name = @Name, PhoneNumber = @PhoneNumber, Email = @Email, Password = @Password where CustomerId = @id";
-                    SqlParameter CustomerId = command.Parameters.Add("@id", SqlDbType.Int);
-                    CustomerId.Value = myCustomer.Id;
+                    //SqlParameter CustomerId = command.Parameters.Add("@id", SqlDbType.Int);
+                    //CustomerId.Value = myCustomer.Id;
+                    command.Parameters.AddWithValue("id", myCustomer.Id);
+
                     command.Parameters.AddWithValue("Name", myCustomer.Name);
                     command.Parameters.AddWithValue("PhoneNumber", myCustomer.PhoneNumber);
                     command.Parameters.AddWithValue("Email", myCustomer.Email);

@@ -43,8 +43,9 @@ namespace DataAccess
                 using (SqlCommand command = connection.CreateCommand())
                 {
                     command.CommandText = "Delete from Admin where AdminId = @id";
-                    SqlParameter AdminId = command.Parameters.Add("@id", SqlDbType.Int);
-                    AdminId.Value = id;
+                    //SqlParameter AdminId = command.Parameters.Add("@id", SqlDbType.Int);
+                    //AdminId.Value = id;
+                    command.Parameters.AddWithValue("id", id);
 
                     command.ExecuteNonQuery();
                 }
@@ -61,8 +62,9 @@ namespace DataAccess
                 using (SqlCommand command = connection.CreateCommand())
                 {
                     command.CommandText = "Select * from Admin where AdminId = @id";
-                    SqlParameter AdminId = command.Parameters.Add("@id", SqlDbType.Int);
-                    AdminId.Value = id;
+                    //SqlParameter AdminId = command.Parameters.Add("@id", SqlDbType.Int);
+                    //AdminId.Value = id;
+                    command.Parameters.AddWithValue("id", id);
 
                     var reader = command.ExecuteReader();
                     while (reader.Read())
@@ -93,8 +95,10 @@ namespace DataAccess
                 {
                     Admin myAdmin = (Admin)obj;
                     command.CommandText = "Update Admin SET Name = @Name, PhoneNumber = @PhoneNumber, Email = @Email, Password = @Password where AdminId = @id";
-                    SqlParameter AdminId = command.Parameters.Add("@id", SqlDbType.Int);
-                    AdminId.Value = myAdmin.Id;
+                    //SqlParameter AdminId = command.Parameters.Add("@id", SqlDbType.Int);
+                    //AdminId.Value = myAdmin.Id;
+                    command.Parameters.AddWithValue("id", myAdmin.Id);
+
                     command.Parameters.AddWithValue("Name", myAdmin.Name);
                     command.Parameters.AddWithValue("PhoneNumber", myAdmin.PhoneNumber);
                     command.Parameters.AddWithValue("Email", myAdmin.Email);

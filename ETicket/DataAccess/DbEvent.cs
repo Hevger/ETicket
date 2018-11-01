@@ -48,8 +48,9 @@ namespace DataAccess
                 using (SqlCommand command = connection.CreateCommand())
                 {
                     command.CommandText = "Select * from Event where EventId = @id";
-                    SqlParameter EventId = command.Parameters.Add("@id", SqlDbType.Int);
-                    EventId.Value = id;
+                    //SqlParameter EventId = command.Parameters.Add("@id", SqlDbType.Int);
+                    //EventId.Value = id;
+                    command.Parameters.AddWithValue("id", id);
 
                     var reader = command.ExecuteReader();
                     while (reader.Read())
@@ -82,9 +83,9 @@ namespace DataAccess
                 using (SqlCommand command = connection.CreateCommand())
                 {
                     command.CommandText = "Delete from Event where EventId = @id";
-                    SqlParameter EventId = command.Parameters.Add("@id", SqlDbType.Int);
-                    EventId.Value = id;
-
+                    //SqlParameter EventId = command.Parameters.Add("@id", SqlDbType.Int);
+                    //EventId.Value = id;
+                    command.Parameters.AddWithValue("id", id);
                     command.ExecuteNonQuery();
                 }
             }
@@ -100,8 +101,9 @@ namespace DataAccess
                 {
                     Event myEvent = (Event)obj;
                     command.CommandText = "Update Event SET Title = @title, Description = @Description, Gate = @Gate, GateOpens = @GateOpens, StartTime = @StartTime, Date = @Date, AvailableTickets = @AvailableTickets, TicketPrice = @TicketPrice where EventId = @id";
-                    SqlParameter EventId = command.Parameters.Add("@id", SqlDbType.Int);
-                    EventId.Value = myEvent.EventId;
+                    //SqlParameter EventId = command.Parameters.Add("@id", SqlDbType.Int);
+                    //EventId.Value = myEvent.EventId;
+                    command.Parameters.AddWithValue("id", myEvent.EventId);
                     command.Parameters.AddWithValue("Title", myEvent.Title);
                     command.Parameters.AddWithValue("Description", myEvent.Description);
                     command.Parameters.AddWithValue("Gate", myEvent.Gate);
