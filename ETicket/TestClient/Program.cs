@@ -1,4 +1,5 @@
-﻿using DataAccess;
+﻿using BusinessLogic;
+using DataAccess;
 using Domain;
 using System;
 using System.Collections.Generic;
@@ -12,8 +13,10 @@ namespace TestClient
     {
         static void Main(string[] args)
         {
-            DbEvent db = new DbEvent();
-            DbSeat dbs = new DbSeat();
+            EventController eventC = new EventController();
+
+            //DbEvent db = new DbEvent();
+            //DbSeat dbs = new DbSeat();
             //DbCustomer dbc = new DbCustomer();
 
             //Event myEvent = new Event()
@@ -82,10 +85,10 @@ namespace TestClient
 
             //cus.Id = 1;
             //dbc.Update(cus);
-            Console.WriteLine(db.Get(1));
+            //Console.WriteLine(db.Get(1));
             Event myEvent = new Event()
             {
-                Title = "Test",
+                Title = "Controller Test",
                 Description = "Learn Something",
                 Gate = "8b8",
                 GateOpens = DateTime.Now,
@@ -95,20 +98,22 @@ namespace TestClient
                 TicketPrice = 35.50M
             };
 
-            //db.Create(myEvent);
-            myEvent.EventId = 1;
+            ////db.Create(myEvent);
+            //myEvent.EventId = 1;
 
-            Seat newSeat = new Seat()
-            {
-                SeatNumber = 3,
-                EventId = myEvent.EventId,
-                Available = true
-            };
+            //Seat newSeat = new Seat()
+            //{
+            //    SeatNumber = 3,
+            //    EventId = myEvent.EventId,
+            //    Available = true
+            //};
 
-            newSeat.SeatId = 4;
-            dbs.Update(newSeat);
+            //newSeat.SeatId = 4;
+            //dbs.Update(newSeat);
 
             //dbs.Create(newSeat);
+
+            eventC.Create(myEvent);
 
 
         }

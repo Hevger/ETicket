@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess
 {
-    class DbOrder : ICRUD
+    public class DbOrder : ICRUD
     {
         string connectionString = ConfigurationManager.ConnectionStrings["Kraka"].ConnectionString;
 

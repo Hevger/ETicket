@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess
 {
-    interface ICRUD
+    public interface ICRUD
     {
         void Create(Object obj);
         Object Get(int id);
