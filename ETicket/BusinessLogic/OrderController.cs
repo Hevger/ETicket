@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLogic
 {
-    class OrderController
+    public class OrderController
     {
         private ICRUD crud = new DbOrder();
         public void Create(Object order) => crud.Create(order);
