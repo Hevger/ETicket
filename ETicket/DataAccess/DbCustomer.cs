@@ -84,6 +84,37 @@ namespace DataAccess
             }
         }
 
+
+        // Get All Customers
+        public List<Object> GetAll()
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                List<Object> customers = new List<Object>();
+                connection.Open();
+                using (SqlCommand command = connection.CreateCommand())
+                {
+                    command.CommandText = "Select CustomerId, Name, PhoneNumber, Email, Password, GUID from Customer";
+             
+                    var reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Customer newCustomer = new Customer
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("CustomerId")),
+                            Name = reader.GetString(reader.GetOrdinal("Name")),
+                            PhoneNumber = reader.GetString(reader.GetOrdinal("PhoneNumber")),
+                            Email = reader.GetString(reader.GetOrdinal("Email")),
+                            Password = reader.GetString(reader.GetOrdinal("Password")),
+                            GUID = reader.GetString(reader.GetOrdinal("GUID"))
+                        };
+                        customers.Add(newCustomer);
+                    }
+                    return customers;
+                }
+            }
+        }
+
         // Update Customer
         public void Update(object obj)
         {

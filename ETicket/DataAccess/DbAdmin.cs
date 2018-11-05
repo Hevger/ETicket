@@ -109,5 +109,38 @@ namespace DataAccess
             }
         }
 
+
+
+        // Get All Admins
+        public List<Object> GetAll()
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                List<Object> admins = new List<Object>();
+                connection.Open();
+                using (SqlCommand command = connection.CreateCommand())
+                {
+                    command.CommandText = "Select AdminId, Name, PhoneNumber, Email, Password, GUID from Admin";
+
+                    var reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Admin newAdmin = new Admin
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("AdminId")),
+                            Name = reader.GetString(reader.GetOrdinal("Name")),
+                            PhoneNumber = reader.GetString(reader.GetOrdinal("PhoneNumber")),
+                            Email = reader.GetString(reader.GetOrdinal("Email")),
+                            Password = reader.GetString(reader.GetOrdinal("Password")),
+                            GUID = reader.GetString(reader.GetOrdinal("GUID"))
+                        };
+                        admins.Add(newAdmin);
+                    }
+                    return admins;
+                }
+            }
+        }
+
+
     }
 }

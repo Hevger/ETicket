@@ -22,5 +22,9 @@ namespace ETicketService
 
         [OperationContract]
         void UpdateCustomer(Customer customer);
+
+        [OperationContract]
+        List<Customer> GetAllCustomers();
+
     }
 }

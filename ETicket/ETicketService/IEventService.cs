@@ -22,5 +22,9 @@ namespace ETicketService
 
         [OperationContract]
         void UpdateEvent(Event myEvent);
+
+        [OperationContract]
+        List<Event> GetAllEvents();
+
     }
 }

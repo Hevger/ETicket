@@ -22,5 +22,8 @@ namespace ETicketService
 
         [OperationContract]
         void UpdateAdmin(Admin myAdmin);
+
+        [OperationContract]
+        List<Admin> GetAllAdmins();
     }
 }

@@ -22,5 +22,8 @@ namespace ETicketService
 
         [OperationContract]
         void UpdateSeat(Seat mySeat);
+
+        [OperationContract]
+        List<Seat> GetAllSeats();
     }
 }

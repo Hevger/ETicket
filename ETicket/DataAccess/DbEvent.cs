@@ -119,6 +119,41 @@ namespace DataAccess
         }
 
 
+
+        // Get All Events
+        public List<Object> GetAll()
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                List<Object> events = new List<Object>();
+                connection.Open();
+                using (SqlCommand command = connection.CreateCommand())
+                {
+                    command.CommandText = "Select * from Event";
+
+                    var reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Event newEvent = new Event
+                        {
+                            EventId = reader.GetInt32(reader.GetOrdinal("EventId")),
+                            Title = reader.GetString(reader.GetOrdinal("Title")),
+                            Description = reader.GetString(reader.GetOrdinal("Description")),
+                            Gate = reader.GetString(reader.GetOrdinal("Gate")),
+                            GateOpens = reader.GetDateTime(reader.GetOrdinal("GateOpens")),
+                            StartTime = reader.GetDateTime(reader.GetOrdinal("StartTime")),
+                            Date = reader.GetDateTime(reader.GetOrdinal("Date")),
+                            AvailableTickets = reader.GetInt32(reader.GetOrdinal("AvailableTickets")),
+                            TicketPrice = reader.GetDecimal(reader.GetOrdinal("TicketPrice"))
+                        };
+                        events.Add(newEvent);
+                    }
+                    return events;
+                }
+            }
+        }
+
+
     }
 
 }

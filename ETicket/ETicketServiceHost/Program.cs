@@ -11,7 +11,7 @@ namespace ETicketServiceHost
     {
         static void Main(string[] args)
         {
-            using(ServiceHost host = new ServiceHost(typeof(ETicketService.ETicketServiceClass)))
+            using (ServiceHost host = new ServiceHost(typeof(ETicketService.ETicketServiceClass)))
             {
                 host.Open();
                 Console.WriteLine("Hosting started at @ " + DateTime.Now);

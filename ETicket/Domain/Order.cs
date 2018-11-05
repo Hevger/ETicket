@@ -10,6 +10,7 @@ namespace Domain
     [DataContract]
     public class Order
     {
+        [DataMember]
         public int OrderId { get; set; }
 
         [DataMember]

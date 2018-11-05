@@ -66,7 +66,7 @@ namespace DataAccess
                             TicketId = reader.GetInt32(reader.GetOrdinal("TicketId")),
                             SeatId = reader.GetInt32(reader.GetOrdinal("SeatId")),
                             EventId = reader.GetInt32(reader.GetOrdinal("EventId")),
-                            CustomerId = reader.GetInt32(reader.GetOrdinal("CustomerId")),
+                            CustomerId = reader.GetInt32(reader.GetOrdinal("CustomerId"))
                         };
                     }
                     return newTicket;
@@ -92,5 +92,35 @@ namespace DataAccess
                 }
             }
         }
+
+        // Get All Tickets
+        public List<Object> GetAll()
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                List<Object> tickets = new List<Object>();
+                connection.Open();
+                using (SqlCommand command = connection.CreateCommand())
+                {
+                    command.CommandText = "Select * from Ticket";
+
+                    var reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Ticket newTicket = new Ticket
+                        {
+                            TicketId = reader.GetInt32(reader.GetOrdinal("TicketId")),
+                            SeatId = reader.GetInt32(reader.GetOrdinal("SeatId")),
+                            EventId = reader.GetInt32(reader.GetOrdinal("EventId")),
+                            CustomerId = reader.GetInt32(reader.GetOrdinal("CustomerId"))
+                        };
+                        tickets.Add(newTicket);
+                    }
+                    return tickets;
+                }
+            }
+        }
+
+
     }
 }

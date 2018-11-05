@@ -10,6 +10,8 @@ namespace Domain
     [DataContract]
     public class Person
     {
+
+        [DataMember]
         public int Id { get; set; }
 
 

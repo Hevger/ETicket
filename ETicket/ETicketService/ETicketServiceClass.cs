@@ -42,6 +42,14 @@ namespace ETicketService
         {
             customerC.Update(customer);
         }
+
+        // Get All Customers
+        public List<Customer> GetAllCustomers()
+        {
+            List<Customer> customers = new List<Customer>(customerC.GetAll().Cast<Customer>());
+            return customers;
+        }
+
         #endregion
 
         #region Event
@@ -69,6 +77,13 @@ namespace ETicketService
         {
             eventC.Update(myEvent);
         }
+
+        // Get All Events
+        public List<Event> GetAllEvents()
+        {
+            List<Event> events = new List<Event>(customerC.GetAll().Cast<Event>());
+            return events;
+        }
         #endregion
 
 
@@ -89,6 +104,13 @@ namespace ETicketService
         public void DeleteAdmin(int id)
         {
             adminC.Delete(id);
+        }
+
+        // Get All Admins
+        public List<Admin> GetAllAdmins()
+        {
+            List<Admin> admins = new List<Admin>(adminC.GetAll().Cast<Admin>());
+            return admins;
         }
 
         // Update Admin
@@ -125,6 +147,13 @@ namespace ETicketService
         {
             orderC.Update(myOrder);
         }
+
+        // Get All Orders
+        public List<Order> GetAllOrders()
+        {
+            List<Order> orders = new List<Order>(orderC.GetAll().Cast<Order>());
+            return orders;
+        }
         #endregion
 
 
@@ -153,6 +182,14 @@ namespace ETicketService
         {
             ticketC.Update(myTicket);
         }
+
+        // Get All Tickets
+        public List<Ticket> GetAllTickets()
+        {
+            List<Ticket> tickets = new List<Ticket>(ticketC.GetAll().Cast<Ticket>());
+            return tickets;
+        }
+
         #endregion
 
 
@@ -179,6 +216,14 @@ namespace ETicketService
         public void UpdateSeat(Seat mySeat)
         {
             seatC.Update(mySeat);
+        }
+
+
+        // Get All Seats
+        public List<Seat> GetAllSeats()
+        {
+            List<Seat> seats = new List<Seat>(ticketC.GetAll().Cast<Seat>());
+            return seats;
         }
         #endregion
 

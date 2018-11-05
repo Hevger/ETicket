@@ -12,6 +12,6 @@ namespace DataAccess
         Object Get(int id);
         void Delete(int id);
         void Update(Object obj);
-
+        List<Object> GetAll();
     }
 }

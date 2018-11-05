@@ -22,5 +22,8 @@ namespace ETicketService
 
         [OperationContract]
         void UpdateOrder(Order myOrder);
+
+        [OperationContract]
+        List<Order> GetAllOrders();
     }
 }

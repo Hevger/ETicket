@@ -95,5 +95,38 @@ namespace DataAccess
                 }
             }
         }
+
+
+
+        // Get All Order
+        public List<Object> GetAll()
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                List<Object> orders = new List<Object>();
+                connection.Open();
+                using (SqlCommand command = connection.CreateCommand())
+                {
+                    command.CommandText = "Select * from Order";
+
+                    var reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Order newOrder = new Order
+                        {
+                            OrderId = reader.GetInt32(reader.GetOrdinal("OrderId")),
+                            TotalPrice = reader.GetDecimal(reader.GetOrdinal("TotalPrice")),
+                            Date = reader.GetDateTime(reader.GetOrdinal("Date")),
+                            Quantity = reader.GetInt32(reader.GetOrdinal("Quantity")),
+                            CustomerId = reader.GetInt32(reader.GetOrdinal("CustomerId"))
+                        };
+                        orders.Add(newOrder);
+                    }
+                    return orders;
+                }
+            }
+        }
+
+
     }
 }

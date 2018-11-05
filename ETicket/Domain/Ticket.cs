@@ -10,6 +10,7 @@ namespace Domain
     [DataContract]
     public class Ticket
     {
+        [DataMember]
         public int TicketId { get; set; }
 
         [DataMember]

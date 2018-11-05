@@ -22,5 +22,8 @@ namespace ETicketService
 
         [OperationContract]
         void UpdateTicket(Ticket myTicket);
+
+        [OperationContract]
+        List<Ticket> GetAllTickets();
     }
 }

@@ -92,5 +92,36 @@ namespace DataAccess
                 }
             }
         }
+
+
+        // Get All Seats
+        public List<Object> GetAll()
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                List<Object> seats = new List<Object>();
+                connection.Open();
+                using (SqlCommand command = connection.CreateCommand())
+                {
+                    command.CommandText = "Select * from Seat";
+
+                    var reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Seat newSeat = new Seat
+                        {
+                            SeatId = reader.GetInt32(reader.GetOrdinal("SeatId")),
+                            SeatNumber = reader.GetInt32(reader.GetOrdinal("SeatNumber")),
+                            EventId = reader.GetInt32(reader.GetOrdinal("EventId")),
+                            Available = reader.GetBoolean(reader.GetOrdinal("Available"))
+                        };
+                        seats.Add(newSeat);
+                    }
+                    return seats;
+                }
+            }
+        }
+
+
     }
 }
