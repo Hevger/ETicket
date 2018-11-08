@@ -68,7 +68,7 @@ namespace DataAccess
                             TotalPrice = reader.GetDecimal(reader.GetOrdinal("TotalPrice")),
                             Date = reader.GetDateTime(reader.GetOrdinal("Date")),
                             Quantity = reader.GetInt32(reader.GetOrdinal("Quantity")),
-                            CustomerId = reader.GetInt32(reader.GetOrdinal("CustomerId"))
+                            CustomerId = reader.GetString(reader.GetOrdinal("CustomerId"))
                         };
                     }
                     return newOrder;
@@ -118,7 +118,7 @@ namespace DataAccess
                             TotalPrice = reader.GetDecimal(reader.GetOrdinal("TotalPrice")),
                             Date = reader.GetDateTime(reader.GetOrdinal("Date")),
                             Quantity = reader.GetInt32(reader.GetOrdinal("Quantity")),
-                            CustomerId = reader.GetInt32(reader.GetOrdinal("CustomerId"))
+                            CustomerId = reader.GetString(reader.GetOrdinal("CustomerId"))
                         };
                         orders.Add(newOrder);
                     }

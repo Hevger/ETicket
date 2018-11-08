@@ -66,7 +66,7 @@ namespace DataAccess
                             TicketId = reader.GetInt32(reader.GetOrdinal("TicketId")),
                             SeatId = reader.GetInt32(reader.GetOrdinal("SeatId")),
                             EventId = reader.GetInt32(reader.GetOrdinal("EventId")),
-                            CustomerId = reader.GetInt32(reader.GetOrdinal("CustomerId"))
+                            CustomerId = reader.GetString(reader.GetOrdinal("CustomerId"))
                         };
                     }
                     return newTicket;
@@ -112,7 +112,7 @@ namespace DataAccess
                             TicketId = reader.GetInt32(reader.GetOrdinal("TicketId")),
                             SeatId = reader.GetInt32(reader.GetOrdinal("SeatId")),
                             EventId = reader.GetInt32(reader.GetOrdinal("EventId")),
-                            CustomerId = reader.GetInt32(reader.GetOrdinal("CustomerId"))
+                            CustomerId = reader.GetString(reader.GetOrdinal("CustomerId"))
                         };
                         tickets.Add(newTicket);
                     }

@@ -45,8 +45,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ETicketServiceClass.cs" />
-    <Compile Include="IAdminService.cs" />
-    <Compile Include="ICustomerService.cs" />
     <Compile Include="IEventService.cs" />
     <Compile Include="IOrderService.cs" />
     <Compile Include="ISeatService.cs" />

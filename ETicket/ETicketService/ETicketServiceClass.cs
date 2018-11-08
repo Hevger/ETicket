@@ -8,49 +8,15 @@ using System.Threading.Tasks;
 
 namespace ETicketService
 {
-    public class ETicketServiceClass : ICustomerService, IEventService, IAdminService, IOrderService, ITicketService, ISeatService
+    public class ETicketServiceClass : IEventService, IOrderService, ITicketService, ISeatService
     {
-        private CustomerController customerC = new CustomerController();
         private EventController eventC = new EventController();
-        private AdminController adminC = new AdminController();
         private OrderController orderC = new OrderController();
         private TicketController ticketC = new TicketController();
         private SeatController seatC = new SeatController();
 
 
-        #region Customer
-        // Create Customer
-        public void CreateCustomer(Customer customer)
-        {
-            customerC.Create(customer);
-        }
-
-        // Delete Customer
-        public void DeleteCustomer(int id)
-        {
-            customerC.Delete(id);
-        }
-
-        // Get Customer
-        public Customer GetCustomer(int id)
-        {
-            return (Customer)customerC.Get(id);
-        }
-
-        // Update Customer
-        public void UpdateCustomer(Customer customer)
-        {
-            customerC.Update(customer);
-        }
-
-        // Get All Customers
-        public List<Customer> GetAllCustomers()
-        {
-            List<Customer> customers = new List<Customer>(customerC.GetAll().Cast<Customer>());
-            return customers;
-        }
-
-        #endregion
+        
 
         #region Event
         // Create Event
@@ -81,45 +47,13 @@ namespace ETicketService
         // Get All Events
         public List<Event> GetAllEvents()
         {
-            List<Event> events = new List<Event>(customerC.GetAll().Cast<Event>());
+            List<Event> events = new List<Event>(eventC.GetAll().Cast<Event>());
             return events;
         }
         #endregion
 
 
-        #region Admin
-        // Get Admin
-        public Admin GetAdmin(int id)
-        {
-           return (Admin) adminC.Get(id);
-        }
-
-        // Create Admin
-        public void CreateAdmin(Admin myAdmin)
-        {
-            adminC.Create(myAdmin);
-        }
-
-        // Delete Admin
-        public void DeleteAdmin(int id)
-        {
-            adminC.Delete(id);
-        }
-
-        // Get All Admins
-        public List<Admin> GetAllAdmins()
-        {
-            List<Admin> admins = new List<Admin>(adminC.GetAll().Cast<Admin>());
-            return admins;
-        }
-
-        // Update Admin
-        public void UpdateAdmin(Admin myAdmin)
-        {
-            adminC.Update(myAdmin);
-        }
-        #endregion
-
+        
 
         #region Order
 

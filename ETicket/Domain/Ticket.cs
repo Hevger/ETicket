@@ -20,6 +20,6 @@ namespace Domain
         public int EventId { get; set; }
 
         [DataMember]
-        public int CustomerId { get; set; }
+        public string CustomerId { get; set; }
     }
 }

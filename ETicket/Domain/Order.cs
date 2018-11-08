@@ -23,7 +23,7 @@ namespace Domain
         public int Quantity { get; set; }
 
         [DataMember]
-        public int CustomerId { get; set; }
+        public string CustomerId { get; set; }
 
         [DataMember]
         public List<Ticket> Tickets { get; set; }
