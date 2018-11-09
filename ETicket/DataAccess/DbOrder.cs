@@ -14,8 +14,9 @@ namespace DataAccess
         string connectionString = ConfigurationManager.ConnectionStrings["Kraka"].ConnectionString;
 
         // Create Order
-        public void Create(object obj)
+        public int Create(object obj)
         {
+            int insertedOrderId;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -27,9 +28,10 @@ namespace DataAccess
                     command.Parameters.AddWithValue("Date", myOrder.Date);
                     command.Parameters.AddWithValue("Quantity", myOrder.Quantity);
                     command.Parameters.AddWithValue("CustomerId", myOrder.CustomerId);
-                    command.ExecuteNonQuery();
+                    insertedOrderId = Convert.ToInt32(command.ExecuteScalar());
                 }
             }
+            return insertedOrderId;
         }
 
         // Delete Order

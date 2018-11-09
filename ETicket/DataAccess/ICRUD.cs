@@ -8,7 +8,7 @@ namespace DataAccess
 {
     public interface ICRUD
     {
-        void Create(Object obj);
+        int Create(Object obj);
         Object Get(int id);
         void Delete(int id);
         void Update(Object obj);

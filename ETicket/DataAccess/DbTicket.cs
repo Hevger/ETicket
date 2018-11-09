@@ -14,21 +14,23 @@ namespace DataAccess
         string connectionString = ConfigurationManager.ConnectionStrings["Kraka"].ConnectionString;
 
         // Create Ticket
-        public void Create(object obj)
+        public int Create(object obj)
         {
+            int insertedTicketId;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
                 using (SqlCommand command = connection.CreateCommand())
                 {
                     Ticket myTicket = (Ticket)obj;
-                    command.CommandText = "Insert into Ticket (SeatId, EventId, CustomerId) values (@SeatId, @EventId, @CustomerId)";
+                    command.CommandText = "Insert into Ticket (SeatId, EventId) values (@SeatId, @EventId); SELECT SCOPE_IDENTITY()";
                     command.Parameters.AddWithValue("SeatId", myTicket.SeatId);
                     command.Parameters.AddWithValue("EventId", myTicket.EventId);
-                    command.Parameters.AddWithValue("CustomerId", myTicket.CustomerId);
-                    command.ExecuteNonQuery();
+                    //command.Parameters.AddWithValue("CustomerId", myTicket.CustomerId);
+                    insertedTicketId = Convert.ToInt32(command.ExecuteScalar());
                 }
             }
+            return insertedTicketId;
         }
 
         // Delete Ticket

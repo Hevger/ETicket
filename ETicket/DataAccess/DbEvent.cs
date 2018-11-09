@@ -13,17 +13,19 @@ namespace DataAccess
     public class DbEvent : ICRUD
     {
         string connectionString = ConfigurationManager.ConnectionStrings["Kraka"].ConnectionString;
-
+        DbSeat dbSeat = new DbSeat();
+        DbTicket dbTicket = new DbTicket();
         // Create Event 
-        public void Create(Object obj)
+        public int Create(Object obj)
         {
+            int insertedId;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
                 using (SqlCommand command = connection.CreateCommand())
                 {
                     Event myEvent = (Event)obj;
-                    command.CommandText = "Insert into Event (Title, Description, Gate, GateOpens, StartTime, Date, AvailableTickets, TicketPrice) values (@Title, @Description, @Gate, @GateOpens, @StartTime, @Date, @AvailableTickets, @TicketPrice)";
+                    command.CommandText = "Insert into Event (Title, Description, Gate, GateOpens, StartTime, Date, AvailableTickets, TicketPrice) values (@Title, @Description, @Gate, @GateOpens, @StartTime, @Date, @AvailableTickets, @TicketPrice); SELECT SCOPE_IDENTITY()";
                     command.Parameters.AddWithValue("Title", myEvent.Title);
                     command.Parameters.AddWithValue("Description", myEvent.Description);
                     command.Parameters.AddWithValue("Gate", myEvent.Gate);
@@ -32,9 +34,28 @@ namespace DataAccess
                     command.Parameters.AddWithValue("Date", myEvent.Date);
                     command.Parameters.AddWithValue("AvailableTickets", myEvent.AvailableTickets);
                     command.Parameters.AddWithValue("TicketPrice", myEvent.TicketPrice);
-                    command.ExecuteNonQuery();
+                    insertedId = Convert.ToInt32(command.ExecuteScalar());
+
+                    int x = myEvent.AvailableTickets;
+                    while (x > 0)
+                    {
+                        Seat newSeat = new Seat();
+                        newSeat.SeatNumber = x;
+                        newSeat.Available = true;
+                        newSeat.EventId = insertedId;
+                        int inseretedSeatId = dbSeat.Create(newSeat);
+
+                        Ticket newTicket = new Ticket();
+                        newTicket.EventId = insertedId;
+                        newTicket.SeatId = inseretedSeatId;
+                        newTicket.CustomerId = null;
+                        dbTicket.Create(newTicket); 
+                        x--;
+                    }
+
                 }
             }
+            return insertedId;
         }
 
 

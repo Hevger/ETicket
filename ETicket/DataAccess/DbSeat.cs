@@ -14,21 +14,23 @@ namespace DataAccess
         string connectionString = ConfigurationManager.ConnectionStrings["Kraka"].ConnectionString;
 
         // Create Seat
-        public void Create(object obj)
+        public int Create(object obj)
         {
+            int insertedSeatId;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
                 using (SqlCommand command = connection.CreateCommand())
                 {
                     Seat mySeat = (Seat)obj;
-                    command.CommandText = "Insert into Seat (SeatNumber, EventId, Available) values (@SeatNumber, @EventId, @Available)";
+                    command.CommandText = "Insert into Seat (SeatNumber, EventId, Available) values (@SeatNumber, @EventId, @Available); SELECT SCOPE_IDENTITY()";
                     command.Parameters.AddWithValue("SeatNumber", mySeat.SeatNumber);
                     command.Parameters.AddWithValue("EventId", mySeat.EventId);
                     command.Parameters.AddWithValue("Available", mySeat.Available);
-                    command.ExecuteNonQuery();
+                    insertedSeatId = Convert.ToInt32(command.ExecuteScalar());
                 }
             }
+            return insertedSeatId;
         }
 
         // Delete Seat
