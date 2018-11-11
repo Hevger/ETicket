@@ -13,8 +13,6 @@ namespace DataAccess
     public class DbEvent : ICRUD
     {
         string connectionString = ConfigurationManager.ConnectionStrings["Kraka"].ConnectionString;
-        DbSeat dbSeat = new DbSeat();
-        DbTicket dbTicket = new DbTicket();
         // Create Event 
         public int Create(Object obj)
         {
@@ -35,24 +33,6 @@ namespace DataAccess
                     command.Parameters.AddWithValue("AvailableTickets", myEvent.AvailableTickets);
                     command.Parameters.AddWithValue("TicketPrice", myEvent.TicketPrice);
                     insertedId = Convert.ToInt32(command.ExecuteScalar());
-
-                    int x = myEvent.AvailableTickets;
-                    while (x > 0)
-                    {
-                        Seat newSeat = new Seat();
-                        newSeat.SeatNumber = x;
-                        newSeat.Available = true;
-                        newSeat.EventId = insertedId;
-                        int inseretedSeatId = dbSeat.Create(newSeat);
-
-                        Ticket newTicket = new Ticket();
-                        newTicket.EventId = insertedId;
-                        newTicket.SeatId = inseretedSeatId;
-                        newTicket.CustomerId = null;
-                        dbTicket.Create(newTicket); 
-                        x--;
-                    }
-
                 }
             }
             return insertedId;

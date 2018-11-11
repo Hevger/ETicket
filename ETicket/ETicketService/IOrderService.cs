@@ -15,7 +15,7 @@ namespace ETicketService
         Order GetOrder(int id);
 
         [OperationContract]
-        void CreateOrder(Order myOrder);
+        int CreateOrder(Order myOrder);
 
         [OperationContract]
         void DeleteOrder(int id);

@@ -64,9 +64,9 @@ namespace ETicketService
         }
 
         // Create Order
-        public void CreateOrder(Order myOrder)
+        public int CreateOrder(Order myOrder)
         {
-            orderC.Create(myOrder);
+           return orderC.Create(myOrder);
         }
 
 

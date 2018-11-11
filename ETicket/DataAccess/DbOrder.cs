@@ -12,6 +12,9 @@ namespace DataAccess
     public class DbOrder : ICRUD
     {
         string connectionString = ConfigurationManager.ConnectionStrings["Kraka"].ConnectionString;
+        DbSeat dbSeat = new DbSeat();
+        DbTicket dbTicket = new DbTicket();
+        DbEvent dbEvent = new DbEvent();
 
         // Create Order
         public int Create(object obj)
@@ -23,12 +26,46 @@ namespace DataAccess
                 using (SqlCommand command = connection.CreateCommand())
                 {
                     Order myOrder = (Order)obj;
-                    command.CommandText = "Insert into Order (TotalPrice, Date, Quantity, CustomerId) values (@TotalPrice, @Date, @Quantity, @CustomerId)";
+                    command.CommandText = "Insert into Orders (TotalPrice, Date, Quantity, CustomerId, EventId) values (@TotalPrice, @Date, @Quantity, @CustomerId, @EventId); SELECT SCOPE_IDENTITY()";
                     command.Parameters.AddWithValue("TotalPrice", myOrder.TotalPrice);
                     command.Parameters.AddWithValue("Date", myOrder.Date);
                     command.Parameters.AddWithValue("Quantity", myOrder.Quantity);
                     command.Parameters.AddWithValue("CustomerId", myOrder.CustomerId);
+                    command.Parameters.AddWithValue("EventId", myOrder.EventId);
                     insertedOrderId = Convert.ToInt32(command.ExecuteScalar());
+
+
+                    int x = myOrder.Quantity;
+                    while (x > 0)
+                    {
+                        SqlCommand command1 = connection.CreateCommand();
+                        Seat newSeat = new Seat();
+                        Event myEvent = (Event) dbEvent.Get(myOrder.EventId);
+                        int availableTickets = myEvent.AvailableTickets;
+
+                        newSeat.SeatNumber = availableTickets;
+                        newSeat.Available = true;
+                        newSeat.EventId = myOrder.EventId;
+                        int inseretedSeatId = dbSeat.Create(newSeat);
+
+                        Ticket newTicket = new Ticket();
+                        newTicket.EventId = myOrder.EventId;
+                        newTicket.SeatId = inseretedSeatId;
+                        newTicket.CustomerId = null;
+                        int TicketId = dbTicket.Create(newTicket);
+                        int EventId2 = myOrder.EventId;
+                        x--;
+                        availableTickets--;
+                        // Minus 1 from available tickets on 
+                        command1.CommandText = "Insert into OrderItems (OrderId, TicketId) values (@OrderId, @TicketId); UPDATE Event set AvailableTickets = @availableTickets WHERE EventId = @EventId2";
+                        command1.Parameters.AddWithValue("OrderId", insertedOrderId);
+                        command1.Parameters.AddWithValue("TicketId", TicketId);
+                        command1.Parameters.AddWithValue("availableTickets", availableTickets);
+                        command1.Parameters.AddWithValue("EventId2", EventId2);
+                        command1.ExecuteNonQuery();
+                        command1.Parameters.Clear();
+                    }
+
                 }
             }
             return insertedOrderId;

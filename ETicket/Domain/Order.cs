@@ -12,6 +12,9 @@ namespace Domain
     {
         [DataMember]
         public int OrderId { get; set; }
+        [DataMember]
+        public int EventId { get; set; }
+
 
         [DataMember]
         public decimal TotalPrice { get; set; }
