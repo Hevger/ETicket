@@ -36,8 +36,6 @@ namespace Domain
 
         [DataMember]
         public decimal TicketPrice { get; set; }
-
-        [DataMember]
-        public List<Seat> ListOfSeats { get; set; }
+        
     }
 }

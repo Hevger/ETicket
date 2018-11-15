@@ -52,6 +52,10 @@
       <Project>{b947ef19-7cf1-4ac9-8bf1-9989dd67f477}</Project>
       <Name>DataAccess</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Domain\Domain.csproj">
+      <Project>{78E58BD2-77D2-4AE5-AC49-8677422CD0BA}</Project>
+      <Name>Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

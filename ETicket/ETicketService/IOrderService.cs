@@ -25,5 +25,8 @@ namespace ETicketService
 
         [OperationContract]
         List<Order> GetAllOrders();
+
+        [OperationContract]
+        List<Order> GetOrdersOfCustomer(string CustomerId);
     }
 }

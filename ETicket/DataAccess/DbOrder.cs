@@ -36,6 +36,7 @@ namespace DataAccess
 
 
                     int x = myOrder.Quantity;
+
                     while (x > 0)
                     {
                         SqlCommand command1 = connection.CreateCommand();
@@ -79,7 +80,7 @@ namespace DataAccess
                 connection.Open();
                 using (SqlCommand command = connection.CreateCommand())
                 {
-                    command.CommandText = "Delete from Order where OrderId = @id";
+                    command.CommandText = "Delete from Orders where OrderId = @id";
                     command.Parameters.AddWithValue("id", id);
                     command.ExecuteNonQuery();
                 }
@@ -95,7 +96,7 @@ namespace DataAccess
                 connection.Open();
                 using (SqlCommand command = connection.CreateCommand())
                 {
-                    command.CommandText = "Select * from Order where OrderId = @id";
+                    command.CommandText = "Select * from Orders where OrderId = @id";
                     command.Parameters.AddWithValue("id", id);
 
                     var reader = command.ExecuteReader();
@@ -146,7 +147,7 @@ namespace DataAccess
                 connection.Open();
                 using (SqlCommand command = connection.CreateCommand())
                 {
-                    command.CommandText = "Select * from Order";
+                    command.CommandText = "Select * from Orders";
 
                     var reader = command.ExecuteReader();
                     while (reader.Read())
@@ -165,6 +166,43 @@ namespace DataAccess
                 }
             }
         }
+
+
+
+
+
+        // Get All Order for Customer
+        public List<Order> GetOrdersOfCustomer(string CustomerId)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                List<Order> orders = new List<Order>();
+                connection.Open();
+                using (SqlCommand command = connection.CreateCommand())
+                {
+                    command.CommandText = "Select * from Orders WHERE CustomerId = @CustomerId";
+                    command.Parameters.AddWithValue("CustomerId", CustomerId);
+
+                    var reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Order newOrder = new Order
+                        {
+                            OrderId = reader.GetInt32(reader.GetOrdinal("OrderId")),
+                            TotalPrice = reader.GetDecimal(reader.GetOrdinal("TotalPrice")),
+                            Date = reader.GetDateTime(reader.GetOrdinal("Date")),
+                            Quantity = reader.GetInt32(reader.GetOrdinal("Quantity")),
+                            CustomerId = reader.GetString(reader.GetOrdinal("CustomerId")),
+                            EventId = reader.GetInt32(reader.GetOrdinal("EventId")),
+
+                        };
+                        orders.Add(newOrder);
+                    }
+                    return orders;
+                }
+            }
+        }
+
 
 
     }

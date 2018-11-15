@@ -88,6 +88,14 @@ namespace ETicketService
             List<Order> orders = new List<Order>(orderC.GetAll().Cast<Order>());
             return orders;
         }
+
+
+        // Get All Orders of Customer
+        public List<Order> GetOrdersOfCustomer(string CustomerId)
+        {
+            List<Order> orders = new List<Order>(orderC.GetOrdersOfCustomer(CustomerId).Cast<Order>());
+            return orders;
+        }
         #endregion
 
 
