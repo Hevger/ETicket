@@ -62,5 +62,8 @@ namespace Domain
                     (TicketPrice == e.TicketPrice);
             }
        }
+
+       
+
     }
 }
