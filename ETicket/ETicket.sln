@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETicketService", "ETicketSe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETicketServiceHost", "ETicketServiceHost\ETicketServiceHost.csproj", "{87029AFF-16BC-41BF-B282-6529EC1E12F4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETicket.Tests", "ETicket.Tests\ETicket.Tests.csproj", "{A1D7698A-46BD-41A2-93C3-F830F9D79EBC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{87029AFF-16BC-41BF-B282-6529EC1E12F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87029AFF-16BC-41BF-B282-6529EC1E12F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87029AFF-16BC-41BF-B282-6529EC1E12F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1D7698A-46BD-41A2-93C3-F830F9D79EBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1D7698A-46BD-41A2-93C3-F830F9D79EBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1D7698A-46BD-41A2-93C3-F830F9D79EBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1D7698A-46BD-41A2-93C3-F830F9D79EBC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

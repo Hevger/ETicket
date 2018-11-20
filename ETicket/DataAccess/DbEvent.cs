@@ -13,6 +13,11 @@ namespace DataAccess
     public class DbEvent : ICRUD
     {
         string connectionString = ConfigurationManager.ConnectionStrings["Kraka"].ConnectionString;
+
+        public DbEvent()
+        {
+
+        }
         // Create Event 
         public int Create(Object obj)
         {
