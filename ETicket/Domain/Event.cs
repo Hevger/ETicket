@@ -36,6 +36,31 @@ namespace Domain
 
         [DataMember]
         public decimal TicketPrice { get; set; }
-        
+
+        public override bool Equals(object obj)
+        {
+            if ((obj == null) || !this.GetType().Equals(obj.GetType()))
+            {
+                return false;
+            }
+            else
+            {
+                Event e = (Event)obj;
+                return (Title == e.Title) && 
+                    (Description == e.Description)
+                    &&
+                    (Gate == e.Gate)
+                    &&
+                    (GateOpens == e.GateOpens)
+                    &&
+                    (StartTime == e.StartTime)
+                    &&
+                    (Date == e.Date)
+                    &&
+                    (AvailableTickets == e.AvailableTickets)
+                    &&
+                    (TicketPrice == e.TicketPrice);
+            }
+       }
     }
 }
