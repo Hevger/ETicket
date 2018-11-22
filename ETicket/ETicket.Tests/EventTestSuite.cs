@@ -47,7 +47,7 @@ namespace ETicket.Tests
         {
             IdOfMyEvent = db.Create(myEvent);
             myEvent.EventId = IdOfMyEvent;
-            myEvent.Title = "Hevgers Title is The Master";
+            myEvent.Title = "It's my new title";
             db.Update(myEvent);
             Assert.AreEqual(myEvent, db.Get(IdOfMyEvent));
         }
@@ -76,6 +76,7 @@ namespace ETicket.Tests
                     command.Parameters.AddWithValue("IdOfMyEvent", IdOfMyEvent-1);
                     command.ExecuteNonQuery();
                 }
+
             }
 
             myEvent = null;

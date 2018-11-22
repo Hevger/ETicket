@@ -96,6 +96,14 @@ namespace ETicketService
             List<Order> orders = new List<Order>(orderC.GetOrdersOfCustomer(CustomerId).Cast<Order>());
             return orders;
         }
+
+
+        // Get All Tickets Of Order
+        public List<Ticket> GetOrderTickets(int id)
+        {
+            List<Ticket> tickes = new List<Ticket>(orderC.GetOrderTickets(id));
+            return tickes;
+        }
         #endregion
 
 

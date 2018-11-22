@@ -52,7 +52,7 @@ namespace DataAccess
                         Ticket newTicket = new Ticket();
                         newTicket.EventId = myOrder.EventId;
                         newTicket.SeatId = inseretedSeatId;
-                        newTicket.CustomerId = null;
+                        newTicket.CustomerId = myOrder.CustomerId;
                         int TicketId = dbTicket.Create(newTicket);
                         int EventId2 = myOrder.EventId;
                         x--;
@@ -70,6 +70,32 @@ namespace DataAccess
                 }
             }
             return insertedOrderId;
+        }
+
+        public List<Ticket> GetOrderTickets(int id)
+        {
+            List<Ticket> tickets = new List<Ticket>();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = connection.CreateCommand())
+                {
+                    Ticket myTicket =  new Ticket();
+                    command.CommandText = "Select * from Ticket Inner Join OrderItems ON OrderItems.OrderId = @OrderId";
+                    command.Parameters.AddWithValue("OrderId", id);
+                    var reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        myTicket.TicketId = reader.GetInt32(reader.GetOrdinal("TicketId"));
+                        myTicket.SeatId = reader.GetInt32(reader.GetOrdinal("SeatId"));
+                        myTicket.EventId = reader.GetInt32(reader.GetOrdinal("EventId"));
+                        myTicket.CustomerId = reader.GetString(reader.GetOrdinal("CustomerId"));
+                        tickets.Add(myTicket);
+                    }
+
+                }
+            }
+            return tickets;
         }
 
         // Delete Order

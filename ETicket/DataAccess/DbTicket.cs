@@ -23,10 +23,10 @@ namespace DataAccess
                 using (SqlCommand command = connection.CreateCommand())
                 {
                     Ticket myTicket = (Ticket)obj;
-                    command.CommandText = "Insert into Ticket (SeatId, EventId) values (@SeatId, @EventId); SELECT SCOPE_IDENTITY()";
+                    command.CommandText = "Insert into Ticket (SeatId, EventId, CustomerId) values (@SeatId, @EventId, @CustomerId); SELECT SCOPE_IDENTITY()";
                     command.Parameters.AddWithValue("SeatId", myTicket.SeatId);
                     command.Parameters.AddWithValue("EventId", myTicket.EventId);
-                    //command.Parameters.AddWithValue("CustomerId", myTicket.CustomerId);
+                    command.Parameters.AddWithValue("CustomerId", myTicket.CustomerId);
                     insertedTicketId = Convert.ToInt32(command.ExecuteScalar());
                 }
             }

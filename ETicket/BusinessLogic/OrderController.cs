@@ -18,5 +18,6 @@ namespace BusinessLogic
         public void Update(Object order) => crud.Update(order);
         public List<Object> GetAll() => crud.GetAll();
         public List<Order> GetOrdersOfCustomer(string CustomerId) => dbOrder.GetOrdersOfCustomer(CustomerId);
+        public List<Ticket> GetOrderTickets(int id) => dbOrder.GetOrderTickets(id);
     }
 }

@@ -28,5 +28,6 @@ namespace ETicketService
 
         [OperationContract]
         List<Order> GetOrdersOfCustomer(string CustomerId);
+        List<Ticket> GetOrderTickets(int id);
     }
 }
