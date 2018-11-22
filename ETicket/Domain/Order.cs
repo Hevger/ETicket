@@ -28,7 +28,6 @@ namespace Domain
         [DataMember]
         public string CustomerId { get; set; }
 
-        [DataMember]
-        public List<Ticket> Tickets { get; set; }
+
     }
 }

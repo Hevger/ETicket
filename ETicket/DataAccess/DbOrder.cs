@@ -72,6 +72,7 @@ namespace DataAccess
             return insertedOrderId;
         }
 
+
         public List<Ticket> GetOrderTickets(int id)
         {
             List<Ticket> tickets = new List<Ticket>();
@@ -81,7 +82,7 @@ namespace DataAccess
                 using (SqlCommand command = connection.CreateCommand())
                 {
                     Ticket myTicket =  new Ticket();
-                    command.CommandText = "Select * from Ticket Inner Join OrderItems ON OrderItems.OrderId = @OrderId";
+                    command.CommandText = "SELECT * FROM Ticket FULL OUTER JOIN OrderItems ON OrderItems.TicketId = Ticket.TicketId WHERE OrderId = @OrderId";
                     command.Parameters.AddWithValue("OrderId", id);
                     var reader = command.ExecuteReader();
                     while (reader.Read())
@@ -134,7 +135,8 @@ namespace DataAccess
                             TotalPrice = reader.GetDecimal(reader.GetOrdinal("TotalPrice")),
                             Date = reader.GetDateTime(reader.GetOrdinal("Date")),
                             Quantity = reader.GetInt32(reader.GetOrdinal("Quantity")),
-                            CustomerId = reader.GetString(reader.GetOrdinal("CustomerId"))
+                            CustomerId = reader.GetString(reader.GetOrdinal("CustomerId")),
+                            EventId = reader.GetInt32(reader.GetOrdinal("EventId"))
                         };
                     }
                     return newOrder;
