@@ -104,6 +104,12 @@ namespace ETicketService
             List<Ticket> tickes = new List<Ticket>(orderC.GetOrderTickets(id));
             return tickes;
         }
+
+        // Cancel order
+        public void Cancel(Order order)
+        {
+            orderC.Cancel(order);
+        }
         #endregion
 
 

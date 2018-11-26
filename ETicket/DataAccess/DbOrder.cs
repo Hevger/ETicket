@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace DataAccess
 {
@@ -20,12 +21,17 @@ namespace DataAccess
         public int Create(object obj)
         {
             int insertedOrderId;
+            
+            using (TransactionScope scope = new TransactionScope())
+            {
+
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
                 using (SqlCommand command = connection.CreateCommand())
                 {
                     Order myOrder = (Order)obj;
+                    Event myEvent = new Event();
                     command.CommandText = "Insert into Orders (TotalPrice, Date, Quantity, CustomerId, EventId) values (@TotalPrice, @Date, @Quantity, @CustomerId, @EventId); SELECT SCOPE_IDENTITY()";
                     command.Parameters.AddWithValue("TotalPrice", myOrder.TotalPrice);
                     command.Parameters.AddWithValue("Date", myOrder.Date);
@@ -41,7 +47,7 @@ namespace DataAccess
                     {
                         SqlCommand command1 = connection.CreateCommand();
                         Seat newSeat = new Seat();
-                        Event myEvent = (Event) dbEvent.Get(myOrder.EventId);
+                        myEvent = (Event) dbEvent.Get(myOrder.EventId);
                         int availableTickets = myEvent.AvailableTickets;
 
                         newSeat.SeatNumber = availableTickets;
@@ -66,12 +72,60 @@ namespace DataAccess
                         command1.ExecuteNonQuery();
                         command1.Parameters.Clear();
                     }
+                    
+                    if(myOrder.Quantity < myEvent.AvailableTickets)
+                        {
+                            scope.Dispose();
+                        }
+                        else {
+                            scope.Complete();
+                        }
+
+                    }
+            }
+            return insertedOrderId;
+            }
+        }
+
+        public void Cancel(Order order)
+        {
+            Order currentOrder = (Order) Get(order.OrderId);
+            int Quantity = currentOrder.Quantity;
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = connection.CreateCommand())
+                {
+                    SqlCommand deleteTicket = connection.CreateCommand();
+                    SqlCommand deleteTicketAndSeat = connection.CreateCommand();
+                    SqlCommand updateEventTickets = connection.CreateCommand();
+                    command.CommandText = "Delete from OrderItems where OrderId = @id; Delete from Orders where OrderId = @id;";
+                    command.Parameters.AddWithValue("id", order.OrderId);
+
+                    List<Ticket> tickets = GetOrderTickets(order.OrderId);
+
+                    command.ExecuteNonQuery();
+
+                    foreach (var item in tickets)
+                    {
+                        deleteTicketAndSeat.CommandText = "Delete from Ticket where TicketId = @TicketId; Delete from Seat where SeatId = @SeatId";
+                        deleteTicketAndSeat.Parameters.AddWithValue("TicketId", item.TicketId);
+                        deleteTicketAndSeat.Parameters.AddWithValue("SeatId", item.SeatId);
+                        deleteTicketAndSeat.ExecuteNonQuery();
+                        deleteTicketAndSeat.Parameters.Clear();
+                    }
+
+                    Event orderEvent = (Event) dbEvent.Get(order.EventId);
+                    int AvailableTickets = orderEvent.AvailableTickets;
+                    updateEventTickets.CommandText = "Update Event set AvailableTickets = @newAvailableTickets where EventId = @EventId";
+                    updateEventTickets.Parameters.AddWithValue("newAvailableTickets", Quantity+AvailableTickets);
+                    updateEventTickets.Parameters.AddWithValue("EventId", order.EventId);
+                    updateEventTickets.ExecuteNonQuery();
 
                 }
             }
-            return insertedOrderId;
         }
-
 
         public List<Ticket> GetOrderTickets(int id)
         {
@@ -81,12 +135,12 @@ namespace DataAccess
                 connection.Open();
                 using (SqlCommand command = connection.CreateCommand())
                 {
-                    Ticket myTicket =  new Ticket();
                     command.CommandText = "SELECT * FROM Ticket FULL OUTER JOIN OrderItems ON OrderItems.TicketId = Ticket.TicketId WHERE OrderId = @OrderId";
                     command.Parameters.AddWithValue("OrderId", id);
                     var reader = command.ExecuteReader();
                     while (reader.Read())
                     {
+                        Ticket myTicket =  new Ticket();
                         myTicket.TicketId = reader.GetInt32(reader.GetOrdinal("TicketId"));
                         myTicket.SeatId = reader.GetInt32(reader.GetOrdinal("SeatId"));
                         myTicket.EventId = reader.GetInt32(reader.GetOrdinal("EventId"));
