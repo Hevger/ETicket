@@ -11,24 +11,33 @@ namespace DataAccess
 {
     public class DbSeat : ICRUD
     {
+
+        public DbSeat()
+        {
+
+        }
         string connectionString = ConfigurationManager.ConnectionStrings["Kraka"].ConnectionString;
 
         // Create Seat
         public int Create(object obj)
         {
-            int insertedSeatId;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                connection.Open();
-                using (SqlCommand command = connection.CreateCommand())
-                {
-                    Seat mySeat = (Seat)obj;
-                    command.CommandText = "Insert into Seat (SeatNumber, EventId, Available) values (@SeatNumber, @EventId, @Available); SELECT SCOPE_IDENTITY()";
-                    command.Parameters.AddWithValue("SeatNumber", mySeat.SeatNumber);
-                    command.Parameters.AddWithValue("EventId", mySeat.EventId);
-                    command.Parameters.AddWithValue("Available", mySeat.Available);
-                    insertedSeatId = Convert.ToInt32(command.ExecuteScalar());
-                }
+                return Create(obj, connection);
+            }
+        }
+
+        public int Create(object obj, SqlConnection connection)
+        {
+            int insertedSeatId;
+            using (SqlCommand command = connection.CreateCommand())
+            {
+                Seat mySeat = (Seat)obj;
+                command.CommandText = "Insert into Seat (SeatNumber, EventId, Available) values (@SeatNumber, @EventId, @Available); SELECT SCOPE_IDENTITY()";
+                command.Parameters.AddWithValue("SeatNumber", mySeat.SeatNumber);
+                command.Parameters.AddWithValue("EventId", mySeat.EventId);
+                command.Parameters.AddWithValue("Available", mySeat.Available);
+                insertedSeatId = Convert.ToInt32(command.ExecuteScalar());
             }
             return insertedSeatId;
         }

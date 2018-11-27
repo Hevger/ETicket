@@ -7,12 +7,15 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace DataAccess
 {
     public class DbEvent : ICRUD
     {
         string connectionString = ConfigurationManager.ConnectionStrings["Kraka"].ConnectionString;
+        DbOrder dbOrder = new DbOrder();
+        DbTicket dbTicket = new DbTicket();
 
         public DbEvent()
         {
@@ -43,22 +46,34 @@ namespace DataAccess
             return insertedId;
         }
 
-
-        // Get Event
         public object Get(int id = 0)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                Event newEvent = null;
-                connection.Open();
-                using (SqlCommand command = connection.CreateCommand())
-                {
-                    command.CommandText = "Select * from Event where EventId = @id";
-                    //SqlParameter EventId = command.Parameters.Add("@id", SqlDbType.Int);
-                    //EventId.Value = id;
-                    command.Parameters.AddWithValue("id", id);
+                return Get(id, connection);
+            }
+        }
+        // Get Event
+        public object Get(int id, SqlConnection connection)
+        {
 
-                    var reader = command.ExecuteReader();
+            Event newEvent = null;
+            if (connection.State == ConnectionState.Closed)
+            {
+                connection.Open();
+            }
+
+            using (SqlCommand command = new SqlCommand("", connection))
+            {
+                command.CommandText = "Select * from Event where EventId = @id";
+                //SqlParameter EventId = command.Parameters.Add("@id", SqlDbType.Int);
+                //EventId.Value = id;
+                command.Parameters.AddWithValue("id", id);
+
+                command.CommandTimeout = 5;
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
+                {
                     while (reader.Read())
                     {
                         newEvent = new Event
@@ -74,9 +89,11 @@ namespace DataAccess
                             TicketPrice = reader.GetDecimal(reader.GetOrdinal("TicketPrice"))
                         };
                     }
-                    return newEvent;
                 }
+                reader.Close();
+                return newEvent;
             }
+
         }
 
 
@@ -91,6 +108,45 @@ namespace DataAccess
                     command.CommandText = "Delete from Event where EventId = @id";
                     //SqlParameter EventId = command.Parameters.Add("@id", SqlDbType.Int);
                     //EventId.Value = id;
+
+                    SqlCommand listAllOrders = connection.CreateCommand();
+                    SqlCommand deleteOrderItems = connection.CreateCommand();
+                    SqlCommand deleteTicketAndSeat = connection.CreateCommand();
+                    SqlCommand deleteOrder = connection.CreateCommand();
+
+
+                    listAllOrders.CommandText = "Select * from Orders where EventId = @id;";
+                    listAllOrders.Parameters.AddWithValue("id", id);
+
+                    List<Order> orders = dbOrder.GetAll().Cast<Order>().ToList();
+
+                    foreach (var order in orders)
+                    {
+                        deleteOrderItems.CommandText = "Delete from OrderItems where OrderId = @OrderId";
+                        deleteOrderItems.Parameters.AddWithValue("OrderId", order.OrderId);
+                        deleteOrderItems.ExecuteNonQuery();
+                        deleteOrderItems.Parameters.Clear();
+                    }
+
+                    List<Ticket> tickets = dbTicket.GetAll().Cast<Ticket>().ToList();
+
+                    foreach (var ticket in tickets)
+                    {
+                        deleteTicketAndSeat.CommandText = "Delete from Ticket where EventId = @EventId; Delete from Seat where EventId = @EventId";
+                        deleteTicketAndSeat.Parameters.AddWithValue("EventId", id);
+                        deleteTicketAndSeat.ExecuteNonQuery();
+                        deleteTicketAndSeat.Parameters.Clear();
+                    }
+
+                    foreach (var order in orders)
+                    {
+                        deleteOrder.CommandText = "Delete from Orders where OrderId = @OrderId";
+                        deleteOrder.Parameters.AddWithValue("OrderId", order.OrderId);
+                        deleteOrder.ExecuteNonQuery();
+                        deleteOrder.Parameters.Clear();
+                    }
+
+
                     command.Parameters.AddWithValue("id", id);
                     command.ExecuteNonQuery();
                 }

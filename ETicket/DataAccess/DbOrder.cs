@@ -12,84 +12,102 @@ namespace DataAccess
 {
     public class DbOrder : ICRUD
     {
+        public DbOrder()
+        {
+
+        }
         string connectionString = ConfigurationManager.ConnectionStrings["Kraka"].ConnectionString;
-        DbSeat dbSeat = new DbSeat();
-        DbTicket dbTicket = new DbTicket();
-        DbEvent dbEvent = new DbEvent();
 
         // Create Order
         public int Create(object obj)
         {
             int insertedOrderId;
-            
-            using (TransactionScope scope = new TransactionScope())
+            TransactionOptions options = new TransactionOptions();
+            options.IsolationLevel = IsolationLevel.Serializable;
+            try
             {
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                using (SqlCommand command = connection.CreateCommand())
+                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
                 {
-                    Order myOrder = (Order)obj;
-                    Event myEvent = new Event();
-                    command.CommandText = "Insert into Orders (TotalPrice, Date, Quantity, CustomerId, EventId) values (@TotalPrice, @Date, @Quantity, @CustomerId, @EventId); SELECT SCOPE_IDENTITY()";
-                    command.Parameters.AddWithValue("TotalPrice", myOrder.TotalPrice);
-                    command.Parameters.AddWithValue("Date", myOrder.Date);
-                    command.Parameters.AddWithValue("Quantity", myOrder.Quantity);
-                    command.Parameters.AddWithValue("CustomerId", myOrder.CustomerId);
-                    command.Parameters.AddWithValue("EventId", myOrder.EventId);
-                    insertedOrderId = Convert.ToInt32(command.ExecuteScalar());
 
-
-                    int x = myOrder.Quantity;
-
-                    while (x > 0)
+                    using (SqlConnection connection = new SqlConnection(connectionString))
                     {
-                        SqlCommand command1 = connection.CreateCommand();
-                        Seat newSeat = new Seat();
-                        myEvent = (Event) dbEvent.Get(myOrder.EventId);
-                        int availableTickets = myEvent.AvailableTickets;
-
-                        newSeat.SeatNumber = availableTickets;
-                        newSeat.Available = true;
-                        newSeat.EventId = myOrder.EventId;
-                        int inseretedSeatId = dbSeat.Create(newSeat);
-
-                        Ticket newTicket = new Ticket();
-                        newTicket.EventId = myOrder.EventId;
-                        newTicket.SeatId = inseretedSeatId;
-                        newTicket.CustomerId = myOrder.CustomerId;
-                        int TicketId = dbTicket.Create(newTicket);
-                        int EventId2 = myOrder.EventId;
-                        x--;
-                        availableTickets--;
-                        // Minus 1 from available tickets on 
-                        command1.CommandText = "Insert into OrderItems (OrderId, TicketId) values (@OrderId, @TicketId); UPDATE Event set AvailableTickets = @availableTickets WHERE EventId = @EventId2";
-                        command1.Parameters.AddWithValue("OrderId", insertedOrderId);
-                        command1.Parameters.AddWithValue("TicketId", TicketId);
-                        command1.Parameters.AddWithValue("availableTickets", availableTickets);
-                        command1.Parameters.AddWithValue("EventId2", EventId2);
-                        command1.ExecuteNonQuery();
-                        command1.Parameters.Clear();
-                    }
-                    
-                    if(myOrder.Quantity < myEvent.AvailableTickets)
+                        connection.Open();
+                        // SqlTransaction transaction = connection.BeginTransaction();
+                        using (SqlCommand command = new SqlCommand("", connection))
                         {
-                            scope.Dispose();
-                        }
-                        else {
-                            scope.Complete();
+                            Order myOrder = (Order)obj;
+                            Event myEvent = new Event();
+                            Event currentEvent = new Event();
+                            DbEvent dbEvent = new DbEvent();
+                            currentEvent = (Event) dbEvent.Get(myOrder.EventId, connection);
+                            int availableTicketsOfCurrentEvent = currentEvent.AvailableTickets;
+                            command.CommandText = "Insert into Orders (TotalPrice, Date, Quantity, CustomerId, EventId) values (@TotalPrice, @Date, @Quantity, @CustomerId, @EventId); SELECT SCOPE_IDENTITY()";
+                            command.Parameters.AddWithValue("TotalPrice", myOrder.TotalPrice);
+                            command.Parameters.AddWithValue("Date", myOrder.Date);
+                            command.Parameters.AddWithValue("Quantity", myOrder.Quantity);
+                            command.Parameters.AddWithValue("CustomerId", myOrder.CustomerId);
+                            command.Parameters.AddWithValue("EventId", myOrder.EventId);
+                            insertedOrderId = Convert.ToInt32(command.ExecuteScalar());
+
+
+                            int x = myOrder.Quantity;
+
+                            while (x > 0)
+                            {
+                                SqlCommand command1 = new SqlCommand("", connection);
+                                Seat newSeat = new Seat();
+                                myEvent = (Event)dbEvent.Get(myOrder.EventId, connection);
+                                int availableTickets = myEvent.AvailableTickets;
+
+                                newSeat.SeatNumber = availableTickets;
+                                newSeat.Available = true;
+                                newSeat.EventId = myOrder.EventId;
+                                DbSeat dbSeat = new DbSeat();
+                                int inseretedSeatId = dbSeat.Create(newSeat, connection);
+
+                                Ticket newTicket = new Ticket();
+                                newTicket.EventId = myOrder.EventId;
+                                newTicket.SeatId = inseretedSeatId;
+                                newTicket.CustomerId = myOrder.CustomerId;
+                                DbTicket dbTicket = new DbTicket();
+                                int TicketId = dbTicket.Create(newTicket, connection);
+                                int EventId2 = myOrder.EventId;
+                                x--;
+                                availableTickets--;
+                                // Minus 1 from available tickets on 
+                                command1.CommandText = "Insert into OrderItems (OrderId, TicketId) values (@OrderId, @TicketId); UPDATE Event set AvailableTickets = @availableTickets WHERE EventId = @EventId2";
+                                command1.Parameters.AddWithValue("OrderId", insertedOrderId);
+                                command1.Parameters.AddWithValue("TicketId", TicketId);
+                                command1.Parameters.AddWithValue("availableTickets", availableTickets);
+                                command1.Parameters.AddWithValue("EventId2", EventId2);
+                                command1.ExecuteNonQuery();
+                                command1.Parameters.Clear();
+                            }
+
+                            if (myOrder.Quantity <= availableTicketsOfCurrentEvent &&  myOrder.Quantity > 0)
+                            {
+                                scope.Complete();
+                                connection.Close();
+                            }
+                           
+
                         }
 
+                        return insertedOrderId;
                     }
+                }
             }
-            return insertedOrderId;
+            catch(Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                return 0;
             }
         }
 
         public void Cancel(Order order)
         {
-            Order currentOrder = (Order) Get(order.OrderId);
+            DbEvent dbEvent = new DbEvent();
+            Order currentOrder = (Order)Get(order.OrderId);
             int Quantity = currentOrder.Quantity;
 
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -116,10 +134,10 @@ namespace DataAccess
                         deleteTicketAndSeat.Parameters.Clear();
                     }
 
-                    Event orderEvent = (Event) dbEvent.Get(order.EventId);
+                    Event orderEvent = (Event)dbEvent.Get(order.EventId);
                     int AvailableTickets = orderEvent.AvailableTickets;
                     updateEventTickets.CommandText = "Update Event set AvailableTickets = @newAvailableTickets where EventId = @EventId";
-                    updateEventTickets.Parameters.AddWithValue("newAvailableTickets", Quantity+AvailableTickets);
+                    updateEventTickets.Parameters.AddWithValue("newAvailableTickets", Quantity + AvailableTickets);
                     updateEventTickets.Parameters.AddWithValue("EventId", order.EventId);
                     updateEventTickets.ExecuteNonQuery();
 
@@ -140,7 +158,7 @@ namespace DataAccess
                     var reader = command.ExecuteReader();
                     while (reader.Read())
                     {
-                        Ticket myTicket =  new Ticket();
+                        Ticket myTicket = new Ticket();
                         myTicket.TicketId = reader.GetInt32(reader.GetOrdinal("TicketId"));
                         myTicket.SeatId = reader.GetInt32(reader.GetOrdinal("SeatId"));
                         myTicket.EventId = reader.GetInt32(reader.GetOrdinal("EventId"));

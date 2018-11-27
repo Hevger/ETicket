@@ -11,24 +11,32 @@ namespace DataAccess
 {
     public class DbTicket : ICRUD
     {
+        public DbTicket()
+        {
+
+        }
         string connectionString = ConfigurationManager.ConnectionStrings["Kraka"].ConnectionString;
 
         // Create Ticket
         public int Create(object obj)
         {
-            int insertedTicketId;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                connection.Open();
-                using (SqlCommand command = connection.CreateCommand())
-                {
-                    Ticket myTicket = (Ticket)obj;
-                    command.CommandText = "Insert into Ticket (SeatId, EventId, CustomerId) values (@SeatId, @EventId, @CustomerId); SELECT SCOPE_IDENTITY()";
-                    command.Parameters.AddWithValue("SeatId", myTicket.SeatId);
-                    command.Parameters.AddWithValue("EventId", myTicket.EventId);
-                    command.Parameters.AddWithValue("CustomerId", myTicket.CustomerId);
-                    insertedTicketId = Convert.ToInt32(command.ExecuteScalar());
-                }
+                return Create(obj, connection);
+            }
+        }
+
+        public int Create(object obj, SqlConnection connection)
+        {
+            int insertedTicketId;
+            using (SqlCommand command = connection.CreateCommand())
+            {
+                Ticket myTicket = (Ticket)obj;
+                command.CommandText = "Insert into Ticket (SeatId, EventId, CustomerId) values (@SeatId, @EventId, @CustomerId); SELECT SCOPE_IDENTITY()";
+                command.Parameters.AddWithValue("SeatId", myTicket.SeatId);
+                command.Parameters.AddWithValue("EventId", myTicket.EventId);
+                command.Parameters.AddWithValue("CustomerId", myTicket.CustomerId);
+                insertedTicketId = Convert.ToInt32(command.ExecuteScalar());
             }
             return insertedTicketId;
         }
