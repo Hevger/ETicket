@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -30,6 +31,10 @@ namespace DataAccess
         public int Create(object obj, SqlConnection connection)
         {
             int insertedSeatId;
+            if (connection.State == ConnectionState.Closed)
+            {
+                connection.Open();
+            }
             using (SqlCommand command = connection.CreateCommand())
             {
                 Seat mySeat = (Seat)obj;
@@ -62,27 +67,37 @@ namespace DataAccess
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                Seat newSeat = null;
-                connection.Open();
-                using (SqlCommand command = connection.CreateCommand())
-                {
-                    command.CommandText = "Select * from Seat where SeatId = @id";
-                    command.Parameters.AddWithValue("id", id);
-
-                    var reader = command.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        newSeat = new Seat
-                        {
-                            SeatId = reader.GetInt32(reader.GetOrdinal("SeatId")),
-                            SeatNumber = reader.GetInt32(reader.GetOrdinal("SeatNumber")),
-                            EventId = reader.GetInt32(reader.GetOrdinal("EventId")),
-                            Available = reader.GetBoolean(reader.GetOrdinal("Available"))
-                        };
-                    }
-                    return newSeat;
-                }
+                return Get(id, connection);
             }
+        }
+
+        public object Get(int id, SqlConnection connection)
+        {
+            if (connection.State == ConnectionState.Closed)
+            {
+                connection.Open();
+            }
+
+            Seat newSeat = null;
+            using (SqlCommand command = connection.CreateCommand())
+            {
+                command.CommandText = "Select * from Seat where SeatId = @id";
+                command.Parameters.AddWithValue("id", id);
+
+                var reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    newSeat = new Seat
+                    {
+                        SeatId = reader.GetInt32(reader.GetOrdinal("SeatId")),
+                        SeatNumber = reader.GetInt32(reader.GetOrdinal("SeatNumber")),
+                        EventId = reader.GetInt32(reader.GetOrdinal("EventId")),
+                        Available = reader.GetBoolean(reader.GetOrdinal("Available"))
+                    };
+                }
+                return newSeat;
+            }
+
         }
 
         // Update Seat

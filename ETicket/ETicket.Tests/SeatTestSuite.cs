@@ -89,19 +89,6 @@ namespace ETicket.Tests
         {
             dbSeat.Delete(IdOfSeat);
             dbEvent.Delete(IdOfMyEvent);
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-
-                connection.Open();
-                using (SqlCommand command = connection.CreateCommand())
-                {
-                    command.CommandText = "DBCC CHECKIDENT('Event', RESEED, @IdOfMyEvent); DBCC CHECKIDENT('Seat', RESEED, @IdOfSeat)";
-                    command.Parameters.AddWithValue("IdOfMyEvent", IdOfMyEvent - 1);
-                    command.Parameters.AddWithValue("IdOfSeat", IdOfSeat - 1);
-                    command.ExecuteNonQuery();
-                }
-            }
-
             myEvent = null;
             mySeat = null;
             dbSeat = null;

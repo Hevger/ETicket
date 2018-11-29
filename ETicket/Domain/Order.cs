@@ -29,5 +29,25 @@ namespace Domain
         public string CustomerId { get; set; }
 
 
+        public override bool Equals(object obj)
+        {
+            if ((obj == null) || !this.GetType().Equals(obj.GetType()))
+            {
+                return false;
+            }
+            else
+            {
+                Order e = (Order)obj;
+                return (EventId == e.EventId) &&
+                    (TotalPrice == e.TotalPrice)
+                    &&
+                    (Date == e.Date)
+                    &&
+                    (Quantity == e.Quantity)
+                    &&
+                    (CustomerId == e.CustomerId);
+            }
+        }
+
     }
 }

@@ -67,18 +67,6 @@ namespace ETicket.Tests
         public void CleanUp()
         {
             db.Delete(IdOfMyEvent);
-            using (SqlConnection connection = new SqlConnection(connectionString)){
-
-                connection.Open();
-                using (SqlCommand command = connection.CreateCommand())
-                {
-                    command.CommandText = "DBCC CHECKIDENT('Event', RESEED, @IdOfMyEvent)";
-                    command.Parameters.AddWithValue("IdOfMyEvent", IdOfMyEvent-1);
-                    command.ExecuteNonQuery();
-                }
-
-            }
-
             myEvent = null;
             db = null;
             IdOfMyEvent = 0;

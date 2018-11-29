@@ -12,6 +12,7 @@ namespace DataAccess
 {
     public class DbOrder : ICRUD
     {
+
         public DbOrder()
         {
 
@@ -88,6 +89,10 @@ namespace DataAccess
                             {
                                 scope.Complete();
                                 connection.Close();
+                            }
+                            else
+                            {
+                                scope.Dispose();
                             }
                            
 
@@ -263,6 +268,26 @@ namespace DataAccess
                         orders.Add(newOrder);
                     }
                     return orders;
+                }
+            }
+        }
+
+        public string GetRandomUser()
+        {
+            string UserId = string.Empty;
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = connection.CreateCommand())
+                {
+                    command.CommandText = "Select TOP 1 Users.Id from Users INNER JOIN UserRole ON Users.Id = UserRole.UserId INNER JOIN Role ON UserRole.RoleId = Role.Id WHERE Role.Name = 'customer' ";
+
+                    var reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        UserId = reader.GetString(reader.GetOrdinal("Id"));
+                    }
+                    return UserId;
                 }
             }
         }

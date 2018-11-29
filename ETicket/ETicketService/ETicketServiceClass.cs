@@ -8,15 +8,22 @@ using System.Threading.Tasks;
 
 namespace ETicketService
 {
-    public class ETicketServiceClass : IEventService, IOrderService, ITicketService, ISeatService
+    public class ETicketServiceClass : IEventService, IOrderService, ITicketService, ISeatService, IAdminService
     {
         private EventController eventC = new EventController();
         private OrderController orderC = new OrderController();
         private TicketController ticketC = new TicketController();
         private SeatController seatC = new SeatController();
+        private AdminController adminC = new AdminController();
 
 
-        
+
+        #region Admin
+        public AdminInfo GetAdminInfo(string AdminUsername)
+        {
+            return adminC.GetAdminInfo(AdminUsername);
+        }
+        #endregion
 
         #region Event
         // Create Event
