@@ -16,6 +16,7 @@ namespace ETicketServiceHost
                 host.Open();
                 Console.WriteLine("Hosting started at @ " + DateTime.Now);
                 Console.ReadLine();
+
             }
         }
     }
