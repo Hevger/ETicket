@@ -20,5 +20,7 @@ namespace BusinessLogic
         public List<Order> GetOrdersOfCustomer(string CustomerId) => dbOrder.GetOrdersOfCustomer(CustomerId);
         public List<Ticket> GetOrderTickets(int id) => dbOrder.GetOrderTickets(id);
         public void Cancel(Order order) => dbOrder.Cancel(order);
+        public List<Order> GetCustomerOrdersByUsername(string Username) => dbOrder.GetCustomerOrdersByUsername(Username);
+
     }
 }

@@ -40,7 +40,7 @@ namespace DataAccess
                             Event myEvent = new Event();
                             Event currentEvent = new Event();
                             DbEvent dbEvent = new DbEvent();
-                            currentEvent = (Event) dbEvent.Get(myOrder.EventId, connection);
+                            currentEvent = (Event)dbEvent.Get(myOrder.EventId, connection);
                             int availableTicketsOfCurrentEvent = currentEvent.AvailableTickets;
                             command.CommandText = "Insert into Orders (TotalPrice, Date, Quantity, CustomerId, EventId) values (@TotalPrice, @Date, @Quantity, @CustomerId, @EventId); SELECT SCOPE_IDENTITY()";
                             command.Parameters.AddWithValue("TotalPrice", myOrder.TotalPrice);
@@ -85,7 +85,7 @@ namespace DataAccess
                                 command1.Parameters.Clear();
                             }
 
-                            if (myOrder.Quantity <= availableTicketsOfCurrentEvent &&  myOrder.Quantity > 0)
+                            if (myOrder.Quantity <= availableTicketsOfCurrentEvent && myOrder.Quantity > 0)
                             {
                                 scope.Complete();
                                 connection.Close();
@@ -94,7 +94,7 @@ namespace DataAccess
                             {
                                 scope.Dispose();
                             }
-                           
+
 
                         }
 
@@ -102,7 +102,7 @@ namespace DataAccess
                     }
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.StackTrace);
                 return 0;
@@ -149,6 +149,36 @@ namespace DataAccess
                 }
             }
         }
+
+
+        public List<Order> GetCustomerOrdersByUsername(string Username)
+        {
+            List<Order> orders = new List<Order>();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = connection.CreateCommand())
+                {
+                    command.CommandText = "SELECT * FROM Orders INNER JOIN Users ON Users.Id = Orders.CustomerId WHERE Users.Username = @Username";
+                    command.Parameters.AddWithValue("Username", Username);
+                    var reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Order myOrder = new Order();
+                        myOrder.OrderId = reader.GetInt32(reader.GetOrdinal("OrderId"));
+                        myOrder.EventId = reader.GetInt32(reader.GetOrdinal("EventId"));
+                        myOrder.TotalPrice = reader.GetDecimal(reader.GetOrdinal("TotalPrice"));
+                        myOrder.Date = reader.GetDateTime(reader.GetOrdinal("Date"));
+                        myOrder.Quantity = reader.GetInt32(reader.GetOrdinal("Quantity"));
+                        myOrder.CustomerId = reader.GetString(reader.GetOrdinal("CustomerId"));
+                        orders.Add(myOrder);
+                    }
+
+                }
+                return orders;
+            }
+        }
+
 
         public List<Ticket> GetOrderTickets(int id)
         {

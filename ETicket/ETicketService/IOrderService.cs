@@ -33,6 +33,9 @@ namespace ETicketService
         List<Ticket> GetOrderTickets(int id);
 
         [OperationContract]
+        List<Order> GetCustomerOrdersByUsername(string Username);
+
+        [OperationContract]
         void Cancel(Order order);
     }
 }

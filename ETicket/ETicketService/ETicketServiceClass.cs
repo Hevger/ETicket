@@ -97,6 +97,14 @@ namespace ETicketService
         }
 
 
+
+        // Get Customer Orders By Username
+        public List<Order> GetCustomerOrdersByUsername(string Username)
+        {
+            List<Order> orders = orderC.GetCustomerOrdersByUsername(Username);
+            return orders;
+        }
+
         // Get All Orders of Customer
         public List<Order> GetOrdersOfCustomer(string CustomerId)
         {
