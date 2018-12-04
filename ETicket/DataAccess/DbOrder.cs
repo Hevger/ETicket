@@ -158,7 +158,7 @@ namespace DataAccess
             {
                 connection.Open();
                 using (SqlCommand command = connection.CreateCommand())
-                {
+                {   
                     command.CommandText = "SELECT * FROM Orders INNER JOIN Users ON Users.Id = Orders.CustomerId WHERE Users.Username = @Username";
                     command.Parameters.AddWithValue("Username", Username);
                     var reader = command.ExecuteReader();

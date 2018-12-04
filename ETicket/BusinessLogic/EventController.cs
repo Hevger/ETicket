@@ -11,7 +11,7 @@ namespace BusinessLogic
     {
         private ICRUD crud = new DbEvent();
 
-        public void Create(Object myEvent) => crud.Create(myEvent);
+        public int Create(Object myEvent) => crud.Create(myEvent);
         public object Get(int id) => crud.Get(id);
         public void Delete(int id) => crud.Delete(id);
         public void Update(Object myEvent) => crud.Update(myEvent);

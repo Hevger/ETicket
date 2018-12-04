@@ -27,9 +27,9 @@ namespace ETicketService
 
         #region Event
         // Create Event
-        public void CreateEvent(Event myEvent)
+        public int CreateEvent(Event myEvent)
         {
-            eventC.Create(myEvent);
+            return eventC.Create(myEvent);
         }
 
         // Delete Event

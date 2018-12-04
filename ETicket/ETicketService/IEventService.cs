@@ -15,7 +15,7 @@ namespace ETicketService
         Event GetEvent(int id);
 
         [OperationContract]
-        void CreateEvent(Event myEvent);
+        int CreateEvent(Event myEvent);
 
         [OperationContract]
         void DeleteEvent(int id);
