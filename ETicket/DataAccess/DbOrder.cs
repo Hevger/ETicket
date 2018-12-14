@@ -36,6 +36,8 @@ namespace DataAccess
                         // SqlTransaction transaction = connection.BeginTransaction();
                         using (SqlCommand command = new SqlCommand("", connection))
                         {
+#region method logic
+
                             Order myOrder = (Order)obj;
                             Event myEvent = new Event();
                             Event currentEvent = new Event();
@@ -49,12 +51,13 @@ namespace DataAccess
                             command.Parameters.AddWithValue("CustomerId", myOrder.CustomerId);
                             command.Parameters.AddWithValue("EventId", myOrder.EventId);
                             insertedOrderId = Convert.ToInt32(command.ExecuteScalar());
-
+#endregion
 
                             int x = myOrder.Quantity;
 
                             while (x > 0)
                             {
+                                #region create seats and tickets
                                 SqlCommand command1 = new SqlCommand("", connection);
                                 Seat newSeat = new Seat();
                                 myEvent = (Event)dbEvent.Get(myOrder.EventId, connection);
@@ -83,6 +86,7 @@ namespace DataAccess
                                 command1.Parameters.AddWithValue("EventId2", EventId2);
                                 command1.ExecuteNonQuery();
                                 command1.Parameters.Clear();
+                                #endregion
                             }
 
                             if (myOrder.Quantity <= availableTicketsOfCurrentEvent && myOrder.Quantity > 0)
